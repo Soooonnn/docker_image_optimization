@@ -71,7 +71,9 @@ ENTRYPOINT ["java", "-jar", "build/libs/*.jar"]
 
 <br>
 
-### Step 2. 경량 베이스 이미지 (Alpine)
+### Step 2. 경량 베이스 이미지
+
+### 1) Alpine
 
 베이스 이미지를 `eclipse-temurin:17-jre-alpine`으로 교체합니다.
 Alpine Linux는 약 5MB의 초경량 배포판으로, 불필요한 패키지가 없어 이미지 크기와 보안 취약점이 동시에 감소합니다.
@@ -95,6 +97,60 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 - 패키지가 줄어든 만큼 CVE 취약점 감소
 - 이미지 크기 감소
 
+### 2) Slim
+
+베이스 이미지를 `eclipse-temurin:17-jre-jammy`로 교체합니다.
+
+Slim 계열 이미지는 Ubuntu 기반으로, 기본 이미지보다 불필요한 패키지를 일부 제거하여 **안정성과 경량화를 동시에 확보**할 수 있습니다.
+
+> 빌드 방식은 동일하고 런타임 이미지만 교체한 케이스입니다.
+> 
+
+```dockerfile
+FROM eclipse-temurin:17-jre-jammy
+
+WORKDIR /app
+
+COPY *.jar app.jar
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "app.jar"]
+```
+
+**Slim 적용 효과**
+
+- 기본 JDK 이미지 대비 불필요한 패키지 감소
+- Alpine 대비 높은 호환성과 안정성 확보
+- 이미지 크기 감소 (단, Alpine/Distroless 대비 제한적)
+- OS 패키지가 남아 있어 취약점 감소 효과는 제한적
+
+  베이스 이미지를 `gcr.io/distroless/java17`로 교체합니다.
+  
+### 3) Distroless
+Distroless 이미지는 shell, package manager 등 OS 구성 요소를 제거한 **최소 실행 환경 이미지**로, 보안 측면에서 가장 강력한 선택입니다.
+
+> 빌드 단계에서 생성된 jar만 포함하여 실행 환경을 최소화한 케이스입니다.
+> 
+
+```dockerfile
+FROM gcr.io/distroless/java17
+
+WORKDIR /app
+
+COPY *.jar app.jar
+
+EXPOSE8080
+
+ENTRYPOINT ["app.jar"]
+```
+
+**Distroless 적용 효과**
+
+- OS 레이어 제거 → 공격 표면 최소화
+- CVE 취약점 수 대폭 감소
+- 이미지 크기 최소화
+- shell 미포함 → 디버깅 어려움 (운영 편의성 감소)
 <br>
 
 ### Step 3. Multi-Stage Build
