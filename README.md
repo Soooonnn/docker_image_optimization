@@ -274,10 +274,12 @@ CVE 취약점 수를 기준으로 보안 수준을 비교했습니다.
 
 | 방법 | 베이스 이미지 | 이미지 크기 | 감소율 |
 |------|-------------|-----------|--------|
-| Baseline | `gradle:8.14-jdk17` | - | - |
-| Alpine | `eclipse-temurin:17-jre-alpine` | - | - |
-| Multi-Stage | `eclipse-temurin:17-jre` | - | - |
-| Multi-Stage + Alpine | `eclipse-temurin:17-jre-alpine` | - | - |
+| Baseline | `gradle:8.14-jdk17` | 1.37GB | - |
+| Alpine | `eclipse-temurin:17-jre-alpine` | 548MB | - |
+| Slim | `eclipse-temurin:17-jre-jammy` | 668MB | - |
+| Distroless | `gcr.io/distroless/java17` | 269MB | - |
+| Multi-Stage | `eclipse-temurin:17-jre` | 411MB | - |
+| Multi-Stage + Alpine | `eclipse-temurin:17-jre-alpine` | 293MB | - |
 
 ### 보안 취약점 비교 (Trivy)
 
