@@ -283,11 +283,6 @@ CVE 취약점 수를 기준으로 보안 수준을 비교했습니다.
 
 ### 보안 취약점 비교 (Trivy)
 
-```bash
-# 취약점 스캔 명령어
-trivy image <이미지명>
-```
-
 | 방법 | Vulnerabilities |
 |------|------|
 | Baseline | 59 |
