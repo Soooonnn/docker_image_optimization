@@ -268,6 +268,9 @@ trivy image app:distroless
 ```
 
 CVE 취약점 수를 기준으로 보안 수준을 비교했습니다.
+
+<br>
+
 ## 👀 실험 결과
 
 ### 이미지 크기 비교
