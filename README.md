@@ -288,12 +288,14 @@ CVE 취약점 수를 기준으로 보안 수준을 비교했습니다.
 trivy image <이미지명>
 ```
 
-| 방법 | CRITICAL | HIGH | MEDIUM | LOW | 합계 |
-|------|----------|------|--------|-----|------|
-| Baseline | - | - | - | - | - |
-| Alpine | - | - | - | - | - |
-| Multi-Stage | - | - | - | - | - |
-| Multi-Stage + Alpine | - | - | - | - | - |
+| 방법 | Vulnerabilities |
+|------|------|
+| Baseline | 59 |
+| Alpine | 8 | 
+| Slim | 84 |
+| Distroless | 21 | 
+| Multi-Stage | 29 |
+| Multi-Stage + Alpine | 8 | 
 
 <br>
 
