@@ -232,6 +232,42 @@ ENTRYPOINT ["java", "-jar", "app.jar"]
 
 <br>
 
+## 🧪 실험 방법
+
+### 📦 이미지 크기 측정
+
+```dockerfile
+docker images
+```
+
+### 🔐 보안 취약점 분석
+
+Trivy를 사용하여 Docker 이미지의 보안 취약점을 분석했습니다.
+
+```
+sudo apt update
+sudo apt install-ywget apt-transport-https gnupg lsb-release
+
+wget-qO- https://aquasecurity.github.io/trivy-repo/deb/public.key |sudo apt-key add-
+
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main |sudotee /etc/apt/sources.list.d/trivy.list
+
+sudo apt update
+sudo apt install trivy
+```
+
+각 이미지에 대해 동일한 방식으로 취약점을 측정했습니다.
+
+```
+trivy image app:before
+trivy image app:alpine
+trivy image app:multi
+trivy image app:multi-alpine
+trivy image app:slim
+trivy image app:distroless
+```
+
+CVE 취약점 수를 기준으로 보안 수준을 비교했습니다.
 ## 실험 결과
 
 ### 이미지 크기 비교
