@@ -303,7 +303,135 @@ CVE 취약점 수를 기준으로 보안 수준을 비교했습니다.
 
 <br>
 
-## Jenkins를 활용한 CI/CD 자동화 구성
+## 🏃Jenkins를 활용한 CI/CD 자동화 구성
+
+### Step 1. Jenkins 컨테이너 실행
+
+Docker 소켓을 마운트하여 Jenkins 컨테이너 안에서 Docker 명령어를 사용할 수 있도록 합니다.
+
+```bash
+docker run -d \
+  --name myjenkins2 \
+  -p 8090:8080 \
+  -v jenkins_home:/var/jenkins_home \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v $(which docker):/usr/bin/docker \
+  jenkins/jenkins:lts
+```
+
+| 옵션 | 설명 |
+|------|------|
+| `-p 8090:8080` | 호스트 8090 → Jenkins 8080 포트 연결 |
+| `-v jenkins_home:/var/jenkins_home` | Jenkins 데이터 영구 보존 |
+| `-v /var/run/docker.sock` | 호스트 Docker 소켓 마운트 (핵심) |
+| `-v $(which docker)` | 호스트 Docker 바이너리 연결 |
+
+<br>
+
+### Step 2. Docker Hub 자격증명 등록
+
+Jenkins에서 Docker Hub에 로그인할 수 있도록 자격증명을 등록합니다.
+
+```
+Jenkins 관리 → Credentials → System → Global credentials → Add Credentials
+  - Kind     : Username with password
+  - Username : {Docker Hub 아이디}
+  - Password : {Docker Hub Access Token}
+  - ID       : dockerhub-credentials
+```
+
+> 비밀번호 대신 **Access Token**를 사용합니다.
+> Docker Hub → Account Settings → Personal Access Tokens에서 발급할 수 있습니다.
+
+<br>
+
+### Step 3. GitHub Webhook 설정
+
+코드 push 시 Jenkins가 자동으로 감지할 수 있도록 Webhook을 등록합니다.
+
+```bash
+# ngrok으로 Jenkins 포트 외부 오픈
+ngrok http 8090
+```
+
+```
+GitHub 레포 → Settings → Webhooks → Add webhook
+  - Payload URL : https://{ngrok주소}/github-webhook/
+  - Content type: application/json
+  - Event       : Just the push event
+```
+
+<br>
+
+### Step 4. Jenkins Pipeline 생성
+
+```
+새로운 Item → Pipeline 선택
+→ Build Triggers: GitHub hook trigger for GITScm polling 체크
+→ Pipeline: 아래 스크립트 입력
+```
+
+```groovy
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main',
+                    url: 'https://github.com/{유저명}/{레포명}.git'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t {DockerHub아이디}/opt:multi-stage .'
+            }
+        }
+
+        stage('Docker Push') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-credentials',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh '''
+                        echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
+                        docker push {DockerHub아이디}/opt:multi-stage
+                        docker logout
+                    '''
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            sh 'docker rmi {DockerHub아이디}/opt:multi-stage || true'
+        }
+    }
+}
+```
+
+<br>
+
+### Step 5. 자동화 동작 확인
+
+소스코드를 수정하고 push하면 자동으로 파이프라인이 실행됩니다.
+
+```bash
+git add .
+git commit -m "update"
+git push origin main
+```
+
+```
+GitHub push 감지
+    → Jenkins Checkout (코드 clone)
+    → Docker Build (이미지 빌드)
+    → Docker Push (Docker Hub 업로드)
+```
 
 <br>
 
