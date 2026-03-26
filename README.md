@@ -2,6 +2,32 @@
 
 > Docker 이미지 최적화 기법을 단계별로 적용하고, 각 기법이 이미지 크기와 보안에 미치는 영향을 실험한 프로젝트입니다.
 
+## 👀 실험 결과
+
+### 이미지 크기 비교
+
+| 방법 | 베이스 이미지 | 이미지 크기 | 감소율 |
+|------|-------------|-----------|--------|
+| 적용 전 | `gradle:8.14-jdk17` | 1.37GB | - |
+| Alpine | `eclipse-temurin:17-jre-alpine` | 548MB | 60.0% |
+| Slim | `eclipse-temurin:17-jre-jammy` | 668MB | 51.2% |
+| Distroless | `gcr.io/distroless/java17` | 269MB | 80.3% |
+| Multi-Stage | `eclipse-temurin:17-jre` | 411MB | 70.0% |
+| Multi-Stage + Alpine | `eclipse-temurin:17-jre-alpine` | 293MB | 78.6% |
+
+### 보안 취약점 비교 (Trivy)
+
+| 방법 | Vulnerabilities |
+|------|------|
+| Baseline | 59 |
+| Alpine | 8 | 
+| Slim | 84 |
+| Distroless | 21 | 
+| Multi-Stage | 29 |
+| Multi-Stage + Alpine | 8 | 
+
+## 실행 아키텍쳐
+
 <br>
 
 ## 👩🏻‍💻 팀원 소개
