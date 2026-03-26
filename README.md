@@ -26,9 +26,19 @@
 | Multi-Stage | 29 |
 | Multi-Stage + Alpine | 8 | 
 
-## 실행 아키텍쳐
-
+## 실행 프로세스
+<img width="1177" height="212" alt="Image" src="https://github.com/user-attachments/assets/4a4c5366-4fb4-48e3-aa3e-748f96dd639c" />
 <br>
+
+## 검증 프로세스
+
+```bash
+1. 이미지 크기 측정
+    도커 이미지 빌드 --> docker images --> 이미지 크기 측정
+
+2. 취약점 확인
+    도커 이미지 빌드 --> trivy image --> 취약점 개수 확인
+```
 
 ## 👩🏻‍💻 팀원 소개
 
