@@ -4,35 +4,22 @@
 
 ## 👀 실험 결과
 
-### 경량 베이스 이미지
-| 방법 | 베이스 이미지 | 이미지 크기 | 감소율 | ⭐️ | 
-|------|-------------|-----------|--------|---|
-| 적용 전 | `gradle:8.14-jdk17` | 1.37GB | - | 
-| Alpine | `eclipse-temurin:17-jre-alpine` | 548MB | 60.0% |⭐️⭐️|
-| Slim | `eclipse-temurin:17-jre-jammy` | 668MB | 51.2% |⭐️|
-| Distroless | `gcr.io/distroless/java17` | 269MB | 80.3% |⭐️⭐️⭐️|
+### 경량 베이스 이미지 최적화 적용
+| 방법 | 베이스 이미지 | 이미지 크기 | 감소율 | 취약점 개수 | ⭐️ | 
+|------|-------------|-----------|--------|---| --------|
+| 적용 전 | `gradle:8.14-jdk17` | 1.37GB | - | 59개 | - |
+| Alpine | `eclipse-temurin:17-jre-alpine` | 548MB | 60.0% | 8개 | ⭐️⭐️⭐️|
+| Slim | `eclipse-temurin:17-jre-jammy` | 668MB | 51.2% | 84개 | ⭐️|
+| Distroless | `gcr.io/distroless/java17` | 269MB | 80.3% | 21개 |⭐️⭐️|
 
-### 이미지 크기 비교
+Distroless가 크기 감소율은 가장 크지만 보안까지 고려하였을 때 종합적으로 Alpine이 가장 뛰어났습니다.
+
+### Multi-stage build 최적화 적용
 
 | 방법 | 베이스 이미지 | 이미지 크기 | 감소율 |
 |------|-------------|-----------|--------|
-| 적용 전 | `gradle:8.14-jdk17` | 1.37GB | - |
-| Alpine | `eclipse-temurin:17-jre-alpine` | 548MB | 60.0% |
-| Slim | `eclipse-temurin:17-jre-jammy` | 668MB | 51.2% |
-| Distroless | `gcr.io/distroless/java17` | 269MB | 80.3% |
 | Multi-Stage | `eclipse-temurin:17-jre` | 411MB | 70.0% |
 | Multi-Stage + Alpine | `eclipse-temurin:17-jre-alpine` | 293MB | 78.6% |
-
-### 보안 취약점 비교 (Trivy)
-
-| 방법 | Vulnerabilities |
-|------|------|
-| Baseline | 59 |
-| Alpine | 8 | 
-| Slim | 84 |
-| Distroless | 21 | 
-| Multi-Stage | 29 |
-| Multi-Stage + Alpine | 8 | 
 
 ## 실행 프로세스
 <img width="1177" height="212" alt="Image" src="https://github.com/user-attachments/assets/4a4c5366-4fb4-48e3-aa3e-748f96dd639c" />
@@ -65,7 +52,7 @@
    - [Step 2. 경량 베이스 이미지 (Alpine)](#step-2-경량-베이스-이미지-alpine)
    - [Step 3. Multi-Stage Build](#step-3-multi-stage-build)
    - [Step 4. Multi-Stage + Alpine (최종)](#step-4-multi-stage--alpine-최종)
-4. [실험 결과](#실험-결과)
+4. [Jenkins를 활용한 CI/CD 자동화 구성](#Jenkins를-활용한-CI/CD-자동화-구성)
 5. [결론](#결론)
 
 <br>
@@ -313,31 +300,10 @@ trivy image app:distroless
 
 CVE 취약점 수를 기준으로 보안 수준을 비교했습니다.
 
+
 <br>
 
-## 👀 실험 결과
-
-### 이미지 크기 비교
-
-| 방법 | 베이스 이미지 | 이미지 크기 | 감소율 |
-|------|-------------|-----------|--------|
-| 적용 전 | `gradle:8.14-jdk17` | 1.37GB | - |
-| Alpine | `eclipse-temurin:17-jre-alpine` | 548MB | 60.0% |
-| Slim | `eclipse-temurin:17-jre-jammy` | 668MB | 51.2% |
-| Distroless | `gcr.io/distroless/java17` | 269MB | 80.3% |
-| Multi-Stage | `eclipse-temurin:17-jre` | 411MB | 70.0% |
-| Multi-Stage + Alpine | `eclipse-temurin:17-jre-alpine` | 293MB | 78.6% |
-
-### 보안 취약점 비교 (Trivy)
-
-| 방법 | Vulnerabilities |
-|------|------|
-| Baseline | 59 |
-| Alpine | 8 | 
-| Slim | 84 |
-| Distroless | 21 | 
-| Multi-Stage | 29 |
-| Multi-Stage + Alpine | 8 | 
+## Jenkins를 활용한 CI/CD 자동화 구성
 
 <br>
 
