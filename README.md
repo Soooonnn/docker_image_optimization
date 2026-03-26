@@ -26,7 +26,7 @@
 
 <br>
 
-## 🌸 실험 개요
+## 📢 실험 개요
 
 도커 이미지를 아무 최적화 없이 빌드하면 불필요한 빌드 도구, 소스코드, 캐시 등이 그대로 포함되어 이미지 크기가 비대해지고 보안 취약점에 노출될 위험이 높아집니다.
 
@@ -41,11 +41,11 @@
 
 | 항목 | 내용 |
 |------|------|
-| OS | Ubuntu 24.04 |
-| Java | 17 |
-| Framework | Spring Boot 4.0.4 |
-| Build Tool | Gradle 8.14 |
-| Docker | Docker Engine |
+| OS | ![js](https://img.shields.io/badge/Ubuntu24.04-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)
+| Language | ![js](https://img.shields.io/badge/Java17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white) |
+| Framework | ![js](https://img.shields.io/badge/Spring4.0.4-6DB33F?style=for-the-badge&logo=spring&logoColor=white) |
+| Build Tool |  ![js](https://img.shields.io/badge/Gradle-02303A.svg?style=for-the-badge&logo=Gradle&logoColor=white) |
+| Docker | ![js](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) |
 | 취약점 스캐너 | Trivy |
 
 <br>
