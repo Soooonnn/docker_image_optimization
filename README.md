@@ -16,10 +16,10 @@ Distroless가 크기 감소율은 가장 크지만 보안까지 고려하였을 
 
 ### Multi-stage build 최적화 적용
 
-| 방법 | 베이스 이미지 | 이미지 크기 | 감소율 |
-|------|-------------|-----------|--------|
-| Multi-Stage | `eclipse-temurin:17-jre` | 411MB | 70.0% |
-| Multi-Stage + Alpine | `eclipse-temurin:17-jre-alpine` | 293MB | 78.6% |
+| 방법 | 베이스 이미지 | 이미지 크기 | 감소율 | 취약점 개수 |
+|------|-------------|-----------|--------| ---------|
+| Multi-Stage | `eclipse-temurin:17-jre` | 411MB | 70.0% | 29개 |
+| Multi-Stage + Alpine | `eclipse-temurin:17-jre-alpine` | 293MB | 78.6% | 8개 |
 
 ## 실행 프로세스
 <img width="1177" height="212" alt="Image" src="https://github.com/user-attachments/assets/4a4c5366-4fb4-48e3-aa3e-748f96dd639c" />
